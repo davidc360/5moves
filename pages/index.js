@@ -11,7 +11,6 @@ export default function Home() {
 
 
 export function HomeLayout({ content }) {
-    console.log(content)
     return (
         <div className={styles.container}>
             <Head>
