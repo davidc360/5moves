@@ -20,11 +20,6 @@ export default function Game({ data }) {
         })
     }, [moves])
 
-    useEffect(() => {
-        console.log(clickOrder)
-        console.log(moves)
-    }, [clickOrder])
-
     const grids = [...Array(9)].map((_, i) => {
         // map each square to the order they were clicked
         // stored as a single number
@@ -152,6 +147,9 @@ export default function Game({ data }) {
                 <div className={styles.grid}>
                     {grids}
                 </div>
+                {winner && (
+                    <div className={styles.result}>you {winner==='X'?'lost':'won'}!</div>
+                )}
             </div>
             
         }/>
