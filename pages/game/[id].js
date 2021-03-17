@@ -147,9 +147,7 @@ export default function Game({ data }) {
                 <div className={styles.grid}>
                     {grids}
                 </div>
-                {winner && (
-                    <div className={styles.result}>you {winner==='X'?'lost':'won'}!</div>
-                )}
+                <div className={styles.result}>{winner ? winner==='X'?'you lost!':'You won!':''}</div>
             </div>
             
         }/>
