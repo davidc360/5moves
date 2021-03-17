@@ -11,11 +11,38 @@ export default function Game({ data }) {
     const gridValuesRef = useRef([...Array(9)])
     const [movesPicked, setMovesPicked] = useState(false)
 
-    const grids = [...Array(9)].map((_, i) => (
-        <div key={i} id={i} onClick={addMove}>
-            {gridValues[i] ? MARKS[gridValues[i]] : ''}
-        </div>
-    ))
+    const [clickOrder, setClickOrder] = useState({})
+    useEffect(() => {
+        moves.forEach((move, i) => {
+            const newOrders = { ...clickOrder }
+            newOrders[move] = newOrders[move] ? newOrders[move] + String(i + 1) : String(i + 1)
+            setClickOrder(newOrders)
+        })
+    }, [moves])
+
+    useEffect(() => {
+        console.log(clickOrder)
+        console.log(moves)
+    }, [clickOrder])
+
+    const grids = [...Array(9)].map((_, i) => {
+        // map each square to the order they were clicked
+        // stored as a single number
+        // i.e., {6: 12} meaning it was clicked first & second time
+        return (
+            <div key={i} id={i} onClick={addMove} className={styles.square}
+                style={{ fontSize: clickOrder[i]?.length > 3 ? '2em': '2em' }}>
+                {movesPicked ?
+                    (gridValues[i] ? MARKS[gridValues[i]] : '') :
+                    (
+                        clickOrder[i] ? 
+                            clickOrder[i].split('').map(num => <div>{num}</div>)
+                            : ''
+                    )
+                }
+            </div>
+        )
+    })
 
     function findWinner(grid=gridValues) {
         // transform grid into 3 rows
@@ -71,6 +98,7 @@ export default function Game({ data }) {
     }
 
     function addMove(e) {
+        console.log(e.target.id)
         if(moves.length<9) setMoves([...moves, e.target.id])
     }
     useEffect(() => {
