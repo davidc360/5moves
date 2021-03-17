@@ -131,8 +131,11 @@ export default function Game({ data }) {
 }
 
 export async function getServerSideProps({ params }) {
-    const req = await fetch(`http://localhost:3000/${params.id}.json`)
-    const data = await req.json()
+    // const req = await fetch(`http://localhost:3000/${params.id}.json`)
+    // const data = await req.json()
+    const data = {
+        moves: "678345012"
+    }
 
     return {
         props: { data: data }
