@@ -108,24 +108,24 @@ export default function Game({ data }) {
         return () => clearInterval(int)
     }, [movesPicked])
 
-    const GameComponent = (
-        <div className={styles.ctn}>
-            <div>
-                Remaining moves: {9 - moves.length}
-                <br/>
-                Moves: {moves}
-            </div>
-            <div>
-                {isBattle && "Opponent moves: " + data.moves}
-            </div>
-            <div className={styles.grid}>
-                {grids}
-            </div>
-        </div>
-    )
     return (
         <HomeLayout content={
-            GameComponent 
+
+            <div className={styles.ctn}>
+                <div>
+                    Remaining moves: {9 - moves.length}
+                    <br/>
+                </div>
+                <div className={styles.players}>
+                    <div>Opponent: <XMark /></div>
+                    <div><CircleMark /> You</div>
+                </div>
+                <br/>
+                <div className={styles.grid}>
+                    {grids}
+                </div>
+            </div>
+            
         }/>
     )
 }
