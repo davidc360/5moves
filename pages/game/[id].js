@@ -5,6 +5,7 @@ import { HomeLayout } from '../index'
 import styles from './Game.module.sass'
 
 export default function Game({ data }) {
+    const isBattle = data !== undefined
     const [moves, setMoves] = useState([])
     const [gridValues, setGridValues] = useState([...Array(9)])
     const gridValuesRef = useRef([...Array(9)])
@@ -71,7 +72,6 @@ export default function Game({ data }) {
 
     function addMove(e) {
         if(moves.length<9) setMoves([...moves, e.target.id])
-        // setMoves('678345012'.split(''))
     }
     useEffect(() => {
         if (moves.length === 9) setMovesPicked(true)
@@ -116,7 +116,7 @@ export default function Game({ data }) {
                 Moves: {moves}
             </div>
             <div>
-                Opponent moves: {data.moves}
+                {isBattle && "Opponent moves: " + data.moves}
             </div>
             <div className={styles.grid}>
                 {grids}
@@ -131,14 +131,14 @@ export default function Game({ data }) {
 }
 
 export async function getServerSideProps({ params }) {
-    // const req = await fetch(`http://localhost:3000/${params.id}.json`)
-    // const data = await req.json()
+    const req = await fetch(`https://tictactoe-spd.herokuapp.com/`)
+    const moves = await req.json()
     const data = {
-        moves: "678345012"
+        moves
     }
 
     return {
-        props: { data: data }
+        props: { data }
     }
 }
 
