@@ -133,8 +133,9 @@ export default function Game({ data }) {
 export async function getServerSideProps({ params }) {
     const req = await fetch(`https://tictactoe-spd.herokuapp.com/`)
     const moves = await req.json()
+
     const data = {
-        moves
+        moves: String(moves)
     }
 
     return {
