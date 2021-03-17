@@ -42,9 +42,9 @@ export default function Game({ data }) {
         const centerMark = matrix[1][1]
         if (centerMark) {
             // check if top left and bottom right is same mark
-            if (matrix[0][0] === centerMark && matrix[2][2]) {
+            if (containsSame([matrix[0][0], centerMark, matrix[2][2]])) {
                 winner = centerMark
-            } else if (matrix[0][2] === centerMark && matrix[2][0]) {
+            } else if (containsSame([matrix[0][2], centerMark, matrix[2][0]])) {
                 // else check if top right is same as bottom left
                 winner = centerMark
             }
@@ -70,8 +70,8 @@ export default function Game({ data }) {
     }
 
     function addMove(e) {
-        // if(moves.length<9) setMoves([...moves, e.target.id])
-        setMoves('678345012'.split(''))
+        if(moves.length<9) setMoves([...moves, e.target.id])
+        // setMoves('678345012'.split(''))
     }
     useEffect(() => {
         if (moves.length === 9) setMovesPicked(true)
