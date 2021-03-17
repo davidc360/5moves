@@ -1,12 +1,15 @@
-.ctn
+.grid
     display: grid
     grid-template-columns: repeat(3, 1fr)
     font-size: 2.5em
     // grid-gap: 2em
 
     > div
-        padding: 0.5em 0.8em
-        text-align: center
+        display: flex
+        align-items: center
+        justify-content: center
+        height: 2.5em
+        width: 2.7em
 
         &:hover
             cursor: pointer
@@ -28,3 +31,30 @@
         &:nth-child(6)
             border-bottom: solid 1px black
 
+.mark
+    width: 100%
+    height: 100%
+    display: block
+    stroke-width: 1
+    stroke: black
+    fill: none
+
+.x_stroke1
+    transform-origin: 50% 50%
+    stroke-dasharray: 40
+    stroke-dashoffset: 40
+    animation: stroke ease 0.6s forwards
+
+.x_stroke2
+    transform-origin: 50% 50%
+    stroke-dasharray: 40
+    stroke-dashoffset: 40
+    animation: stroke 0.6s ease 0.25s forwards
+
+.circle
+    transform-origin: 50% 50%
+    transform: rotate(-90deg)
+
+@keyframes stroke
+    100%
+        stroke-dashoffset: 0
