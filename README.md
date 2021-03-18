@@ -9,4 +9,4 @@ How it works:
 
 ## Deployment
 
-Coming soon
+https://5moves.xyz/
