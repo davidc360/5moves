@@ -144,7 +144,7 @@ export default function Game({ data }) {
     function createLink(e) {
         console.log(process.env.BACKEND_ENDPOINT + 'game')
         axios.post(process.env.BACKEND_ENDPOINT + 'game', {
-            moves: moves,
+            moves: moves.join(''),
             name: 'David'
         })
         .then(resp => console.log(resp))
@@ -153,31 +153,33 @@ export default function Game({ data }) {
 
     return (
         <HomeLayout content={
-
-            <div className={styles.ctn}>
-                {
-                    !isBattle &&
-                    <div className={styles.prompt}>Pick {MAX_MOVES} moves to create a game</div>
-                }
-                <div>
-                    Remaining moves: {MAX_MOVES - moves.length}
-                    <br/>
-                </div>
-                { isBattle &&
-                    <div className={styles.players}>
-                        <div>Opponent: <XMark /></div>
-                        <div><CircleMark /> You</div>
+            data.moves === 'error' ?
+                (<div>Game not found.</div>)
+                : (
+                <div className={styles.ctn}>
+                    {
+                        !isBattle &&
+                        <div className={styles.prompt}>Pick {MAX_MOVES} moves to create a game</div>
+                    }
+                    <div>
+                        Remaining moves: {MAX_MOVES - moves.length}
+                        <br/>
                     </div>
-                }
-                <br/>
-                <div className={styles.grid}>
-                    {grids}
+                    { isBattle &&
+                        <div className={styles.players}>
+                            <div>Opponent: <XMark /></div>
+                            <div><CircleMark /> You</div>
+                        </div>
+                    }
+                    <br/>
+                    <div className={styles.grid}>
+                        {grids}
+                    </div>
+                    {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
+                    {(movesPicked && !isBattle) && <div className={styles.createLink} onClick={createLink}>Create Link</div>}
+                    <div className={styles.result}>{winner ? winner==='X'?'you lost!':'You won!':''}</div>
                 </div>
-                {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
-                {(movesPicked && !isBattle) && <div className={styles.createLink} onClick={createLink}>Create Link</div>}
-                <div className={styles.result}>{winner ? winner==='X'?'you lost!':'You won!':''}</div>
-            </div>
-            
+            )
         }/>
     )
 }
