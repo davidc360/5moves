@@ -8,6 +8,7 @@ import axios from "axios"
 const MAX_MOVES = 5
 
 export default function Game({ data }) {
+    const router = useRouter()
     const isBattle = data !== undefined
     const [winner, setWinner] = useState()
     const [moves, setMoves] = useState([])
@@ -142,19 +143,25 @@ export default function Game({ data }) {
     }, [movesPicked])
 
     function createLink(e) {
-        console.log(process.env.BACKEND_ENDPOINT + 'game')
         axios.post(process.env.BACKEND_ENDPOINT + 'game', {
             moves: moves.join(''),
             name: 'David'
         })
-        .then(resp => console.log(resp))
         .catch(err => console.log(err))
+    }
+
+    function routeToHome(e) {
+        router.push('/')
     }
 
     return (
         <HomeLayout content={
             isBattle && data.moves === 'error' ?
-                (<div>Game not found.</div>)
+                (<>
+                    <div>Game not found.</div>
+                    <div className={styles.button} onClick={routeToHome}>Create Game</div>
+                 </>
+                )
                 : (
                 <div className={styles.ctn}>
                     {
@@ -176,7 +183,7 @@ export default function Game({ data }) {
                         {grids}
                     </div>
                     {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
-                    {(movesPicked && !isBattle) && <div className={styles.createLink} onClick={createLink}>Create Link</div>}
+                    {(movesPicked && !isBattle) && <div className={`${styles.createLink} ${styles.button}`} onClick={createLink}>Create Link</div>}
                     <div className={styles.result}>{winner ? winner==='X'?'you lost!':'You won!':''}</div>
                 </div>
             )
