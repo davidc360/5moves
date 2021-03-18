@@ -142,12 +142,34 @@ export default function Game({ data }) {
         }
     }, [movesPicked])
 
+    const [linkCreated, setLinkCreated] = useState(false)
+    const nameInputRef = useRef()
     function createLink(e) {
-        axios.post(process.env.BACKEND_ENDPOINT + 'game', {
-            moves: moves.join(''),
-            name: 'David'
-        })
-        .catch(err => console.log(err))
+        if (!linkCreated) {
+            axios.post(process.env.BACKEND_ENDPOINT + 'game', {
+                moves: moves.join(''),
+                name: 'David'
+            })
+                .then(res => {
+                    const link = process.env.DEPLOYMENT_LINK + res.data
+                    nameInputRef.current.value = link
+                    nameInputRef.current.select()
+                    document.execCommand('copy')
+                    setLinkCreated(true)
+                    e.target.textContent = 'Copied!'
+                    setTimeout(() => {
+                        e.target.textContent = 'Copy'
+                    }, 1000)
+                })
+                .catch(err => console.log(err))
+        } else {
+            nameInputRef.current.select()
+            document.execCommand('copy') 
+            e.target.textContent = 'Copied!'
+            setTimeout(() => {
+                e.target.textContent = 'Copy'
+            }, 1000)
+        }
     }
 
     function routeToHome(e) {
@@ -183,8 +205,13 @@ export default function Game({ data }) {
                         {grids}
                     </div>
                     {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
-                    {(movesPicked && !isBattle) && <div className={`${styles.createLink} ${styles.button}`} onClick={createLink}>Create Link</div>}
-                    <div className={styles.result}>{winner ? winner==='X'?'you lost!':'You won!':''}</div>
+                    {movesPicked && !isBattle && (
+                        <div className={styles.createLinkCtn}>
+                            <input className={`${styles.name}`} ref={nameInputRef} type='text' placeholder='name (optional)' readOnly={linkCreated}></input>
+                            <div className={`${styles.createLink} ${styles.button}`} onClick={createLink}>Create & Copy Link</div>
+                        </div>
+                    )}
+                    {isBattle && <div className={styles.result}>{winner ? winner === 'X' ? 'you lost!' : 'You won!' : ''}</div>}
                 </div>
             )
         }/>

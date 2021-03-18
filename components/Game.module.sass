@@ -115,28 +115,35 @@
     transform-origin: 50% 50%
     transform: rotate(-90deg)
 
-.button
+.createLinkCtn
+    display: flex
+    justify-content: flex-end
+    animation: slideInBottom 0.5s ease
     margin-top: 2em
+
+.button, .name
     border: 1px solid black
     padding: 0.5em
+
+.button
     &:hover
         background: #e6e6e6
         cursor: pointer
 
-    &:empty
-        visibility: hidden
-
-.createLink
-    position: absolute
-    right: 0
-    animation: slideInRight 0.5s ease
+.name
+    margin-right: 1em
+    width: 16em
+    text-overflow: ellipsis
+    &[contentEditable=true]:empty:not(:focus)::before
+        content: 'sfds'
+        color: grey
 
 @keyframes stroke
     100%
         stroke-dashoffset: 0
 
-@keyframes slideInRight
+@keyframes slideInBottom
     0% 
-        transform: translateX(3em)
+        transform: translateY(3em)
     100%
-        transform: translateX(0)
+        transform: translateY(0)
