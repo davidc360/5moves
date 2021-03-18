@@ -4,37 +4,48 @@ import { HomeLayout } from '../index'
 
 import styles from './Game.module.sass'
 
+const MAX_MOVES = 5
+
 export default function Game({ data }) {
     const isBattle = data !== undefined
+    const [winner, setWinner] = useState()
     const [moves, setMoves] = useState([])
     const [gridValues, setGridValues] = useState([...Array(9)])
     const gridValuesRef = useRef([...Array(9)])
     const [movesPicked, setMovesPicked] = useState(false)
 
-    const [clickOrder, setClickOrder] = useState({})
-    useEffect(() => {
-        moves.forEach((move, i) => {
-            const newOrders = { ...clickOrder }
-            newOrders[move] = newOrders[move] ? newOrders[move] + String(i + 1) : String(i + 1)
-            setClickOrder(newOrders)
-        })
-    }, [moves])
+    // show player's moves as numbers
+    // const [clickOrder, setClickOrder] = useState({})
+    // useEffect(() => {
+    //     moves.forEach((move, i) => {
+    //         const newOrders = { ...clickOrder }
+    //         newOrders[move] = newOrders[move] ? newOrders[move] + String(i + 1) : String(i + 1)
+    //         setClickOrder(newOrders)
+    //     })
+    // }, [moves])
 
     const grids = [...Array(9)].map((_, i) => {
         // map each square to the order they were clicked
         // stored as a single number
         // i.e., {6: 12} meaning it was clicked first & second time
         return (
-            <div key={i} id={i} onClick={addMove} className={styles.square}
-                style={{ fontSize: clickOrder[i]?.length > 3 ? '2em': '2em' }}>
+            <div key={i} id={i} onClick={addMove} className={`${styles.square} ${winner&&styles.dim}`}>
                 {movesPicked ?
                     (gridValues[i] ? MARKS[gridValues[i]] : '') :
                     (
-                        clickOrder[i] ? 
-                            clickOrder[i].split('').map(num => <div>{num}</div>)
-                            : ''
+                        // create an array of length
+                        // of (the number of occurrences of i in moves), in other words how many of times did the player pick this square
+                        // fill array with circle icons
+                       [...Array(moves.filter(m => m == i).length)].map(_ => <CircleMark />)
                     )
+                    // show player's moves as numbers
+                    // ( clickOrder[i] ? 
+                    //         clickOrder[i].split('').map(num => <div>{num}</div>)
+                    //         : ''
+                    // )
+                    // show player's moves as icons
                 }
+                {/* {console.log(moves, (moves.filter(m => m == i)))} */}
             </div>
         )
     })
@@ -76,14 +87,12 @@ export default function Game({ data }) {
         return winner
     }
     // find winner
-    const [winner, setWinner] = useState()
     useEffect(() => {
         // use a temp winner variable to avoid waiting for
         // "setWinner" to take effect in changing the state
         // and clear timeouts immediately
         let winner_ = findWinner()
         if (winner_) timeouts.current.forEach(timeout => clearTimeout(timeout))
-
         setWinner(winner_)
     }, [gridValues])
 
@@ -94,10 +103,10 @@ export default function Game({ data }) {
 
     function addMove(e) {
         console.log(e.target.id)
-        if(moves.length<9) setMoves([...moves, e.target.id])
+        if(moves.length<MAX_MOVES) setMoves([...moves, e.target.id])
     }
     useEffect(() => {
-        if (moves.length === 9) setMovesPicked(true)
+        if (moves.length === MAX_MOVES) setMovesPicked(true)
     })
 
     function addMoveToGrid(move, mark) {
@@ -115,7 +124,7 @@ export default function Game({ data }) {
     useEffect(() => {
         let int
         if (movesPicked) {
-            for (let i = 0; i < 9; i++) {
+            for (let i = 0; i < MAX_MOVES; i++) {
                 timeouts.current.push(setTimeout(() => {
                     // set opponent's move
                     addMoveToGrid(data.moves[i], 'X')
@@ -136,7 +145,7 @@ export default function Game({ data }) {
 
             <div className={styles.ctn}>
                 <div>
-                    Remaining moves: {9 - moves.length}
+                    Remaining moves: {MAX_MOVES - moves.length}
                     <br/>
                 </div>
                 <div className={styles.players}>
