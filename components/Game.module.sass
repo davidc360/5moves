@@ -2,6 +2,10 @@
     display: grid
     grid-template-rows: repeat(3, 7em)
     grid-template-columns: repeat(3, 7em)
+
+.prompt
+    font-size: 1.5em
+    margin-bottom: 1em
         
 .players
     display: flex
@@ -16,6 +20,7 @@
 
 .square
     display: inline-flex
+    position: relative
     text-align: center
     align-items: center
     align-content: center
@@ -76,6 +81,9 @@
     flex: 1 0 50%
     // flex-basis: 0
 
+    &:nth-child(5)
+        position: absolute
+        width: 50%
     &:last-child
         flex-grow: 0
         flex-basis: 50%
@@ -107,6 +115,27 @@
     transform-origin: 50% 50%
     transform: rotate(-90deg)
 
+.createLink
+    margin-top: 2em
+    position: absolute
+    right: 0
+    animation: slideInRight 0.5s ease
+    border: 1px solid black
+    padding: 0.5em
+
+    &:hover
+        background: lightgray
+        cursor: pointer
+
+    &:empty
+        visibility: hidden
+
 @keyframes stroke
     100%
         stroke-dashoffset: 0
+
+@keyframes slideInRight
+    0% 
+        transform: translateX(3em)
+    100%
+        transform: translateX(0)
