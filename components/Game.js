@@ -153,7 +153,7 @@ export default function Game({ data }) {
 
     return (
         <HomeLayout content={
-            data.moves === 'error' ?
+            isBattle && data.moves === 'error' ?
                 (<div>Game not found.</div>)
                 : (
                 <div className={styles.ctn}>
