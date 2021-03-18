@@ -7,7 +7,7 @@ export default function GameBattle(props) {
 }
 
 export async function getServerSideProps({ params }) {
-    const req = await fetch(`https://tictactoe-spd.herokuapp.com/`)
+    const req = await fetch(process.env.BACKEND_ENDPOINT)
     const moves = await req.json()
 
     const data = {

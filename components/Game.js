@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import HomeLayout from './HomeLayout.js'
 
 import styles from './Game.module.sass'
+import axios from "axios"
 
 const MAX_MOVES = 5
 
@@ -36,7 +37,7 @@ export default function Game({ data }) {
                         // create an array of length
                         // of (the number of occurrences of i in moves), in other words how many of times did the player pick this square
                         // fill array with circle icons
-                        [...Array(moves.filter(m => m == i).length)].map(_ => <div className={styles.squareMarkWrap}>{isBattle ? <CircleMark /> : <XMark />}</div>)
+                        [...Array(moves.filter(m => m == i).length)].map((_, _i) => <div className={styles.squareMarkWrap} key={_i}>{isBattle ? <CircleMark /> : <XMark />}</div>)
                     )
                     // show player's moves as numbers
                     // ( clickOrder[i] ? 
@@ -102,7 +103,6 @@ export default function Game({ data }) {
     }
 
     function addMove(e) {
-        console.log(e.target.id)
         if(moves.length<MAX_MOVES) setMoves([...moves, e.target.id])
     }
     useEffect(() => {
@@ -141,6 +141,16 @@ export default function Game({ data }) {
         }
     }, [movesPicked])
 
+    function createLink(e) {
+        console.log(process.env.BACKEND_ENDPOINT + 'game')
+        axios.post(process.env.BACKEND_ENDPOINT + 'game', {
+            moves: moves,
+            name: 'David'
+        })
+        .then(resp => console.log(resp))
+        .catch(err => console.log(err))
+    }
+
     return (
         <HomeLayout content={
 
@@ -164,7 +174,7 @@ export default function Game({ data }) {
                     {grids}
                 </div>
                 {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
-                {(movesPicked && !isBattle) && <div className={styles.createLink}>Create Link</div>}
+                {(movesPicked && !isBattle) && <div className={styles.createLink} onClick={createLink}>Create Link</div>}
                 <div className={styles.result}>{winner ? winner==='X'?'you lost!':'You won!':''}</div>
             </div>
             
