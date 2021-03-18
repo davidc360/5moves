@@ -36,7 +36,7 @@ export default function Game({ data }) {
                         // create an array of length
                         // of (the number of occurrences of i in moves), in other words how many of times did the player pick this square
                         // fill array with circle icons
-                       [...Array(moves.filter(m => m == i).length)].map(_ => <CircleMark />)
+                        [...Array(moves.filter(m => m == i).length)].map(_ => <div className={styles.squareMarkWrap}>{isBattle ? <CircleMark /> : <XMark />}</div>)
                     )
                     // show player's moves as numbers
                     // ( clickOrder[i] ? 

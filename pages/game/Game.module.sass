@@ -22,6 +22,7 @@
     flex-wrap: wrap
     justify-content: space-around
     padding: 0 0.3em
+    // flex-shrink: 1
 
     > div
         width: 0.8em
@@ -67,6 +68,19 @@
     text-align: center
     margin-top: 2em
     height: 1em
+
+.squareMarkWrap
+    width: 100%
+    flex-shrink: 1
+    // limit 2 items per row
+    flex: 1 0 50%
+    // flex-basis: 0
+
+    &:last-child
+        flex-grow: 0
+        flex-basis: 50%
+    &:only-child
+        flex-grow: 1
 
 .mark
     width: 100%
