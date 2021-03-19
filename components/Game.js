@@ -8,7 +8,6 @@ import axios from "axios"
 const MAX_MOVES = 5
 
 export default function Game({ data }) {
-    console.log(data)
     const router = useRouter()
     const isBattle = data !== undefined
     const [winner, setWinner] = useState()
@@ -206,12 +205,13 @@ export default function Game({ data }) {
                     <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
                     <div className={styles.tip}>
                         { isBattle ?
-                                (data?.name ? data.name : 'Opponent') + ' picked their moves.'
+                                <span><strong>{data?.name ? data.name : 'Opponent'}</strong> picked their moves.</span>
                                 : 'TIp: you can pick the same square more than once.'
                         }
                     </div>
                     <div>
                         Remaining moves: {MAX_MOVES - moves.length}
+                        {/* {movesPicked ? '' : 'Remaining moves: ' + (MAX_MOVES - moves.length)} */}
                         <br/>
                     </div>
                     { isBattle &&
@@ -227,7 +227,7 @@ export default function Game({ data }) {
                     {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
                     {movesPicked && !isBattle && (
                         <div className={styles.createLinkCtn}>
-                            <input className={`${styles.name}`} ref={nameInputRef} type='text' placeholder='name (optional)' readOnly={linkCreated}></input>
+                                <input className={`${styles.name}`} ref={nameInputRef} type='text' maxLength={10} placeholder='name (optional)' readOnly={linkCreated}></input>
                             <div className={`${styles.createLink} ${styles.button}`} onClick={createLink}>Create & Copy Link</div>
                         </div>
                     )}
