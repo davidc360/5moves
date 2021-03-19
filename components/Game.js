@@ -147,11 +147,12 @@ export default function Game({ data }) {
     function createLink(e) {
         if (!linkCreated) {
             setLinkCreated(true)
-            e.target.textContent = '.'
+            let num_dots = 0
+            e.target.textContent = 'Creating link'
             const loadingDotsInt = setInterval(() => {
-                const cur = e.target.textContent
-                e.target.textContent = '.'.repeat((cur.length)%4+1)
-            }, 500)
+                num_dots = (num_dots+1)%5 
+                e.target.textContent = 'Creating link' + '.'.repeat(num_dots)
+            }, 300)
             axios.post(process.env.NEXT_PUBLIC_BACKEND_ENDPOINT + 'game', {
                 moves: moves.join(''),
                 name: nameInputRef.current.value
