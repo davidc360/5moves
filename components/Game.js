@@ -146,16 +146,23 @@ export default function Game({ data }) {
     const nameInputRef = useRef()
     function createLink(e) {
         if (!linkCreated) {
+            setLinkCreated(true)
+            e.target.textContent = '.'
+            const loadingDotsInt = setInterval(() => {
+                const cur = e.target.textContent
+                e.target.textContent = '.'.repeat((cur.length)%4+1)
+            }, 500)
             axios.post(process.env.NEXT_PUBLIC_BACKEND_ENDPOINT + 'game', {
                 moves: moves.join(''),
                 name: nameInputRef.current.value
             })
                 .then(res => {
+                    // stop the loading dots
+                    clearInterval(loadingDotsInt)
                     const link = process.env.DEPLOYMENT_LINK + 'game/' + res.data
                     nameInputRef.current.value = link
                     nameInputRef.current.select()
                     document.execCommand('copy')
-                    setLinkCreated(true)
                     e.target.textContent = 'Copied!'
                     setTimeout(() => {
                         e.target.textContent = 'Copy'
@@ -178,6 +185,7 @@ export default function Game({ data }) {
 
     return (
         <HomeLayout content={
+            // display error is game isnt found on database
             isBattle && data.moves === 'error' ?
                 (<>
                     <div>Game not found.</div>
@@ -185,6 +193,7 @@ export default function Game({ data }) {
                  </>
                 )
                 : (
+            // main game
                 <div className={styles.ctn}>
                     {
                         !isBattle &&
