@@ -146,8 +146,7 @@ export default function Game({ data }) {
     const nameInputRef = useRef()
     function createLink(e) {
         if (!linkCreated) {
-            console.log(process.env.BACKEND_ENDPOINT)
-            axios.post(process.env.BACKEND_ENDPOINT + 'game', {
+            axios.post(process.env.NEXT_PUBLIC_BACKEND_ENDPOINT + 'game', {
                 moves: moves.join(''),
                 name: nameInputRef.current.value
             })

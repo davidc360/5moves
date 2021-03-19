@@ -10,7 +10,7 @@ export async function getServerSideProps({ query }) {
     const { gameid } = query
 
     try {
-        const req = await fetch(process.env.BACKEND_ENDPOINT + 'game/' + gameid)
+        const req = await fetch(process.env.NEXT_PUBLIC_BACKEND_ENDPOINT + 'game/' + gameid)
         const res = await req.json()
         // const moves = await req.json()
     
