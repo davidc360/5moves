@@ -151,7 +151,7 @@ export default function Game({ data }) {
                 name: nameInputRef.current.value
             })
                 .then(res => {
-                    const link = process.env.DEPLOYMENT_LINK + res.data
+                    const link = process.env.DEPLOYMENT_LINK + 'game/' + res.data
                     nameInputRef.current.value = link
                     nameInputRef.current.select()
                     document.execCommand('copy')
