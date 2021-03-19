@@ -8,6 +8,7 @@ import axios from "axios"
 const MAX_MOVES = 5
 
 export default function Game({ data }) {
+    console.log(data)
     const router = useRouter()
     const isBattle = data !== undefined
     const [winner, setWinner] = useState()
@@ -169,7 +170,11 @@ export default function Game({ data }) {
                         e.target.textContent = 'Copy'
                     }, 2000)
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    console.log(err)
+                    clearInterval(loadingDotsInt)
+                    e.target.textContent = 'Error, try again'
+                })
         } else {
             if (e.target.textContent === 'Copy') {
                 nameInputRef.current.select()
@@ -199,8 +204,7 @@ export default function Game({ data }) {
             // main game
                 <div className={styles.ctn}>
                     {
-                        !isBattle &&
-                        <div className={styles.prompt}>Pick {MAX_MOVES} moves to create a game</div>
+                        <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
                     }
                     <div>
                         Remaining moves: {MAX_MOVES - moves.length}
@@ -208,7 +212,7 @@ export default function Game({ data }) {
                     </div>
                     { isBattle &&
                         <div className={styles.players}>
-                            <div>Opponent: <XMark /></div>
+                            <div>{data?.name ? data.name : 'Opponent'}: <XMark /></div>
                             <div><CircleMark /> You</div>
                         </div>
                     }

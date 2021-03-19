@@ -16,7 +16,8 @@ export async function getServerSideProps({ query }) {
     
         const data = {
             // moves: String(moves)
-            moves: String(res.moves)
+            moves: String(res.moves),
+            name: res.name
         }
     
         return {
