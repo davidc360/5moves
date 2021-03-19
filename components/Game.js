@@ -159,7 +159,7 @@ export default function Game({ data }) {
                 .then(res => {
                     // stop the loading dots
                     clearInterval(loadingDotsInt)
-                    const link = process.env.DEPLOYMENT_LINK + 'game/' + res.data
+                    const link = process.env.PUBLIC_NEXT_DEPLOYMENT_LINK + 'game/' + res.data
                     nameInputRef.current.value = link
                     nameInputRef.current.select()
                     document.execCommand('copy')
