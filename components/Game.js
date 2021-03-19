@@ -170,12 +170,14 @@ export default function Game({ data }) {
                 })
                 .catch(err => console.log(err))
         } else {
-            nameInputRef.current.select()
-            document.execCommand('copy') 
-            e.target.textContent = 'Copied!'
-            setTimeout(() => {
-                e.target.textContent = 'Copy'
-            }, 1000)
+            if (e.target.textContent === 'Copy') {
+                nameInputRef.current.select()
+                document.execCommand('copy') 
+                e.target.textContent = 'Copied!'
+                setTimeout(() => {
+                    e.target.textContent = 'Copy'
+                }, 1000)
+            }
         }
     }
 
