@@ -148,7 +148,7 @@ export default function Game({ data }) {
         if (!linkCreated) {
             axios.post(process.env.BACKEND_ENDPOINT + 'game', {
                 moves: moves.join(''),
-                name: 'David'
+                name: nameInputRef.current.value
             })
                 .then(res => {
                     const link = process.env.DEPLOYMENT_LINK + res.data
@@ -159,7 +159,7 @@ export default function Game({ data }) {
                     e.target.textContent = 'Copied!'
                     setTimeout(() => {
                         e.target.textContent = 'Copy'
-                    }, 1000)
+                    }, 2000)
                 })
                 .catch(err => console.log(err))
         } else {
