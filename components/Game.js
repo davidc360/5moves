@@ -193,7 +193,7 @@ export default function Game({ data }) {
 
     return (
         <HomeLayout content={
-            // display error is game isnt found on database
+            // display error is game isn't found on database
             isBattle && data.moves === 'error' ?
                 (<>
                     <div>Game not found.</div>
@@ -203,9 +203,13 @@ export default function Game({ data }) {
                 : (
             // main game
                 <div className={styles.ctn}>
-                    {
-                        <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
-                    }
+                    <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
+                    <div className={styles.tip}>
+                        { isBattle ?
+                                (data?.name ? data.name : 'Opponent') + ' picked their moves.'
+                                : 'TIp: you can pick the same square more than once.'
+                        }
+                    </div>
                     <div>
                         Remaining moves: {MAX_MOVES - moves.length}
                         <br/>
