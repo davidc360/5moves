@@ -275,7 +275,7 @@ function getCoordinates({ row, column, diagonalStart }) {
     if (row !== undefined) {
         return [0, 1, 2].map(x => x+3*row)
     } else if (column !== undefined) {
-        return [0, 3, 6].map(x => x+2*column)
+        return [0, 3, 6].map(x => x+column)
     } else if (diagonalStart !== undefined) {
         return diagonalStart == 0 ? [0, 4, 8] : [2, 4, 6]
     }
