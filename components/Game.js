@@ -104,11 +104,6 @@ export default function Game({ data }) {
         // use a temp winner variable to avoid waiting for
         // "setWinner" to take effect in changing the state
         // and clear timeouts immediately
-        if (timeouts.current.length === MAX_MOVES * 2) {
-            setTimeout(() => {
-                setWinner('Draw')
-            }, 800)
-        }
         const winner_data = findWinner()
         if (winner_data) {
             timeouts.current.forEach(timeout => clearTimeout(timeout))
@@ -155,6 +150,12 @@ export default function Game({ data }) {
                         timeouts.current.push(setTimeout(() => {
                                 addMoveToGrid(moves[i], 'O')
                         }, speed))
+
+                        if (i === MAX_MOVES - 1) {
+                            timeouts.current.push(setTimeout(() => {
+                                setWinner('Draw')
+                            }, speed))
+                        }
                     }, i*speed*2))
                 }
             }
