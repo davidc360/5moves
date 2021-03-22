@@ -9,13 +9,23 @@ const MAX_MOVES = 5
 
 export default function Game({ data }) {
     const router = useRouter()
-    const isBattle = data !== undefined
+    const [isBattle, setIsBattle] = useState(data !== undefined)
+    const [oppMoves, setOppMoves] = useState(data?.moves)
     const [winner, setWinner] = useState()
+    const [winnerCoordinates, setWinnerCoordinates] = useState([])
     const [moves, setMoves] = useState([])
     const [gridValues, setGridValues] = useState([...Array(9)])
     const gridValuesRef = useRef([...Array(9)])
     const [movesPicked, setMovesPicked] = useState(false)
-
+    
+    function reset() {
+        setWinner()
+        setWinnerCoordinates([])
+        setMoves([])
+        setGridValues([...Array(9)])
+        gridValuesRef.current = [...Array(9)]
+        setMovesPicked(false)
+    }
     // show player's moves as numbers
     // const [clickOrder, setClickOrder] = useState({})
     // useEffect(() => {
@@ -31,7 +41,7 @@ export default function Game({ data }) {
         // stored as a single number
         // i.e., {6: 12} meaning it was clicked first & second time
         return (
-            <div key={i} id={i} onClick={addMove} className={`${styles.square} ${winner&&styles.dim}`}>
+            <div key={i} id={i} onClick={addMove} className={`${styles.square} ${winner?styles.dim:''} ${winnerCoordinates.includes(i)?styles.blackStroke:''}`}>
                 {movesPicked && isBattle ?
                     (gridValues[i] ? MARKS[gridValues[i]] : '') :
                     (
@@ -47,7 +57,6 @@ export default function Game({ data }) {
                     // )
                     // show player's moves as icons
                 }
-                {/* {console.log(moves, (moves.filter(m => m == i)))} */}
             </div>
         )
     })
@@ -62,13 +71,13 @@ export default function Game({ data }) {
             (row, i) => {
                 // check if the whole row is same, which means a line
                 if (containsSame(row)) {
-                    winner = row[0]
+                    winner = [row[0], getCoordinates({row: i})]
                 }
                 
                 // check if [i] column is the same
                 const column = matrix.map(row_ => row_[i])
                 if (containsSame(column)) {
-                    winner = column[0] 
+                    winner = [column[0] , getCoordinates({column: i})]
                 }
             }
         )
@@ -79,10 +88,10 @@ export default function Game({ data }) {
         if (centerMark) {
             // check if top left and bottom right is same mark
             if (containsSame([matrix[0][0], centerMark, matrix[2][2]])) {
-                winner = centerMark
+                winner = [centerMark, getCoordinates({diagonalStart: 0})]
             } else if (containsSame([matrix[0][2], centerMark, matrix[2][0]])) {
                 // else check if top right is same as bottom left
-                winner = centerMark
+                winner = [centerMark, getCoordinates({diagonalStart: 2})]
             }
         }
 
@@ -93,9 +102,13 @@ export default function Game({ data }) {
         // use a temp winner variable to avoid waiting for
         // "setWinner" to take effect in changing the state
         // and clear timeouts immediately
-        let winner_ = findWinner()
-        if (winner_) timeouts.current.forEach(timeout => clearTimeout(timeout))
-        setWinner(winner_)
+        const winner_data = findWinner()
+        if (winner_data) {
+            timeouts.current.forEach(timeout => clearTimeout(timeout))
+            setWinner(winner_data[0])
+            setWinnerCoordinates(winner_data[1])
+        }
+        
     }, [gridValues])
 
     function containsSame(arr) {
@@ -129,7 +142,7 @@ export default function Game({ data }) {
                 for (let i = 0; i < MAX_MOVES; i++) {
                     timeouts.current.push(setTimeout(() => {
                         // set opponent's move
-                        addMoveToGrid(data.moves[i], 'X')
+                        addMoveToGrid(oppMoves[i], 'X')
     
                         // set self move
                         timeouts.current.push(setTimeout(() => {
@@ -193,7 +206,7 @@ export default function Game({ data }) {
     return (
         <HomeLayout content={
             // display error is game isn't found on database
-            isBattle && data.moves === 'error' ?
+            isBattle && oppMoves === 'error' ?
                 (<>
                     <div>Game not found.</div>
                     <div className={styles.button} onClick={routeToHome}>Create Game</div>
@@ -205,7 +218,7 @@ export default function Game({ data }) {
                     <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
                     <div className={styles.tip}>
                         { isBattle ?
-                                <span><strong>{data?.name ? data.name : 'Opponent'}</strong> picked their moves.</span>
+                                <span><strong>{data?.name ? data.name : 'Opponent'}</strong> has picked their moves.</span>
                                 : 'TIp: you can pick the same square more than once.'
                         }
                     </div>
@@ -231,11 +244,28 @@ export default function Game({ data }) {
                             <div className={`${styles.createLink} ${styles.button}`} onClick={createLink}>Create & Copy Link</div>
                         </div>
                     )}
-                    {isBattle && <div className={styles.result}>{winner ? winner === 'X' ? 'you lost!' : 'You won!' : ''}</div>}
+                        {isBattle && winner && (
+                            <>
+                                <div className={styles.result}>
+                                    {winner === 'X' ? 'You lost!' : 'You won!'}
+                                    <div className={styles.button} onClick={reset}>Try Again</div>
+                                </div>
+                            </>
+                        )}
                 </div>
             )
         }/>
     )
+}
+
+function getCoordinates({ row, column, diagonalStart }) {
+    if (row !== undefined) {
+        return [0, 1, 2].map(x => x+3*row)
+    } else if (column !== undefined) {
+        return [0, 3, 6].map(x => x+2*column)
+    } else if (diagonalStart !== undefined) {
+        return diagonalStart == 0 ? [0, 4, 8] : [2, 4, 6]
+    }
 }
 
 const XMark = () => (
