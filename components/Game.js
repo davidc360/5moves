@@ -258,12 +258,12 @@ export default function Game({ data }) {
                     {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
                     {movesPicked && !isBattle && (
                         <>
-                        <div className={styles.createLinkCtn}>
+                        <div className={`${styles.createLinkCtn} ${styles.slideUp}`}>
                                 <input className={`${styles.name}`} ref={nameInputRef} type='text' maxLength={10} placeholder='name (optional)' readOnly={linkCreated}></input>
                             <div className={`${styles.createLink} ${styles.button}`} onClick={createLink}>Create & Copy Link</div>
                         </div>
                         <br/>
-                        <div className={`${styles.button} ${styles.playNow}`} onClick={playNow}>Play Now</div>
+                        <div className={`${styles.button} ${styles.playNow} ${styles.slideUp}`} onClick={playNow}>Play Now</div>
                         </>
                     )}
                         {isBattle && winner && (
