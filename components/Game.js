@@ -24,6 +24,7 @@ export default function Game({ data }) {
         setWinnerCoordinates([])
         setMoves([])
         setGridValues([...Array(9)])
+        timeouts.current = []
         gridValuesRef.current = [...Array(9)]
         setMovesPicked(false)
     }
@@ -42,7 +43,7 @@ export default function Game({ data }) {
         // stored as a single number
         // i.e., {6: 12} meaning it was clicked first & second time
         return (
-            <div key={i} id={i} onClick={addMove} className={`${styles.square} ${winner?styles.dim:''} ${winnerCoordinates.includes(i)?styles.blackStroke:''}`}>
+            <div key={i} id={i} onClick={addMove} className={`${styles.square} ${(winner&&winner!=='Draw')?styles.dim:''} ${winnerCoordinates.includes(i)?styles.blackStroke:''}`}>
                 {movesPicked && isBattle ?
                     (gridValues[i] ? MARKS[gridValues[i]] : '') :
                     (
@@ -103,6 +104,10 @@ export default function Game({ data }) {
         // use a temp winner variable to avoid waiting for
         // "setWinner" to take effect in changing the state
         // and clear timeouts immediately
+        console.log(timeouts.current.length)
+        if (timeouts.current.length === MAX_MOVES * 2) {
+            setWinner('Draw')
+        }
         const winner_data = findWinner()
         if (winner_data) {
             timeouts.current.forEach(timeout => clearTimeout(timeout))
@@ -229,7 +234,7 @@ export default function Game({ data }) {
                     <div className={styles.tip}>
                         { isBattle ?
                                 <span><strong>{oppName ? oppName : 'Opponent'}</strong> has picked their moves.</span>
-                                : 'TIp: you can pick the same square more than once.'
+                                : 'Tip: you can pick the same square more than once.'
                             }
                     </div>
                     <div>
@@ -259,7 +264,7 @@ export default function Game({ data }) {
                         <div className={`${styles.button} ${styles.playNow}`} onClick={playNow}>Play Now</div>
                         </>
                     )}
-                        {isBattle && gridValues.length === 9 && (
+                        {isBattle && winner && (
                             <>
                                 <div className={styles.result}>
                                     {winner === 'X' ? 'You lost!' : winner === 'O' ? 'You won!' : 'Draw!'}
