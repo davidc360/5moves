@@ -11,6 +11,7 @@ export default function Game({ data }) {
     const router = useRouter()
     const [isBattle, setIsBattle] = useState(data !== undefined)
     const [oppMoves, setOppMoves] = useState(data?.moves)
+    const [oppName, setOppName] = useState(data?.moves)
     const [winner, setWinner] = useState()
     const [winnerCoordinates, setWinnerCoordinates] = useState([])
     const [moves, setMoves] = useState([])
@@ -203,6 +204,14 @@ export default function Game({ data }) {
         router.push('/')
     }
 
+    function playNow(e) {
+        const tempMoves = moves
+        reset()
+        setOppName(nameInputRef.current.value)
+        setIsBattle(true)
+        setOppMoves(tempMoves)
+    }
+
     return (
         <HomeLayout content={
             // display error is game isn't found on database
@@ -218,7 +227,7 @@ export default function Game({ data }) {
                     <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
                     <div className={styles.tip}>
                         { isBattle ?
-                                <span><strong>{data?.name ? data.name : 'Opponent'}</strong> has picked their moves.</span>
+                                <span><strong>{oppName ? oppName : 'Opponent'}</strong> has picked their moves.</span>
                                 : 'TIp: you can pick the same square more than once.'
                         }
                     </div>
@@ -229,7 +238,7 @@ export default function Game({ data }) {
                     </div>
                     { isBattle &&
                         <div className={styles.players}>
-                            <div>{data?.name ? data.name : 'Opponent'}: <XMark /></div>
+                            <div>{oppName ? oppName : 'Opponent'}: <XMark /></div>
                             <div><CircleMark /> You</div>
                         </div>
                     }
@@ -239,10 +248,14 @@ export default function Game({ data }) {
                     </div>
                     {/* <div className={styles.createLink}>{movesPicked && !isBattle ? 'Create Link' : ''}</div> */}
                     {movesPicked && !isBattle && (
+                        <>
                         <div className={styles.createLinkCtn}>
                                 <input className={`${styles.name}`} ref={nameInputRef} type='text' maxLength={10} placeholder='name (optional)' readOnly={linkCreated}></input>
                             <div className={`${styles.createLink} ${styles.button}`} onClick={createLink}>Create & Copy Link</div>
                         </div>
+                        <br/>
+                        <div className={`${styles.button} ${styles.playNow}`} onClick={playNow}>Play Now</div>
+                        </>
                     )}
                         {isBattle && winner && (
                             <>
