@@ -104,9 +104,10 @@ export default function Game({ data }) {
         // use a temp winner variable to avoid waiting for
         // "setWinner" to take effect in changing the state
         // and clear timeouts immediately
-        console.log(timeouts.current.length)
         if (timeouts.current.length === MAX_MOVES * 2) {
-            setWinner('Draw')
+            setTimeout(() => {
+                setWinner('Draw')
+            }, 800)
         }
         const winner_data = findWinner()
         if (winner_data) {
