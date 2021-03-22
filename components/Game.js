@@ -224,17 +224,19 @@ export default function Game({ data }) {
                 : (
             // main game
                 <div className={styles.ctn}>
+                    <div className={isBattle && movesPicked ? styles.hide : ''}>
                     <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
                     <div className={styles.tip}>
                         { isBattle ?
                                 <span><strong>{oppName ? oppName : 'Opponent'}</strong> has picked their moves.</span>
                                 : 'TIp: you can pick the same square more than once.'
-                        }
+                            }
                     </div>
                     <div>
                         Remaining moves: {MAX_MOVES - moves.length}
                         {/* {movesPicked ? '' : 'Remaining moves: ' + (MAX_MOVES - moves.length)} */}
                         <br/>
+                    </div>
                     </div>
                     { isBattle &&
                         <div className={styles.players}>
@@ -257,10 +259,10 @@ export default function Game({ data }) {
                         <div className={`${styles.button} ${styles.playNow}`} onClick={playNow}>Play Now</div>
                         </>
                     )}
-                        {isBattle && winner && (
+                        {isBattle && gridValues.length === 9 && (
                             <>
                                 <div className={styles.result}>
-                                    {winner === 'X' ? 'You lost!' : 'You won!'}
+                                    {winner === 'X' ? 'You lost!' : winner === 'O' ? 'You won!' : 'Draw!'}
                                     <div className={styles.button} onClick={reset}>Try Again</div>
                                 </div>
                             </>
