@@ -11,7 +11,7 @@ export default function Game({ data }) {
     const router = useRouter()
     const [isBattle, setIsBattle] = useState(data !== undefined)
     const [oppMoves, setOppMoves] = useState(data?.moves)
-    const [oppName, setOppName] = useState(data?.moves)
+    const [oppName, setOppName] = useState(data?.name)
     const [winner, setWinner] = useState()
     const [winnerCoordinates, setWinnerCoordinates] = useState([])
     const [moves, setMoves] = useState([])
