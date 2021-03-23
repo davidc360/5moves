@@ -21,7 +21,11 @@ export default function Game({ data }) {
 
     const getInitGrid = () => {
         const arr = [...Array(9)]
-        if (oppMoves) arr[oppMoves[0]] = 'X'
+        if (oppMoves) {
+            arr[oppMoves[0]] = 'X'
+        } else if (moves) {
+            arr[moves[0]] = 'X'
+        }
         return arr
     }
     const [gridValues, setGridValues] = useState(getInitGrid())
@@ -57,13 +61,13 @@ export default function Game({ data }) {
         return (
             <div key={i} id={i} onClick={addMove} className={`${movesPicked? styles.squareBattle:styles.squarePick} ${(winner&&winner!=='Draw')?styles.dim:''} ${winnerCoordinates.includes(i)?styles.blackStroke:''}`}>
                 {movesPicked && isBattle ?
-                    (gridValues[i] ? [MARKS[gridValues[i]], (movesThatDontCount[i] === 'X' ? <div className={styles.invalidMove}><XMark /></div> : movesThatDontCount[i] === 'O' ? <div className={styles.invalidMove}><CircleMark /></div> : null)] : '') :
+                    (gridValues[i] ? [MARKS[gridValues[i]], (movesThatDontCount[i] === 'X' ? <div className={styles.invalidMove} key={99}><XMark /></div> : movesThatDontCount[i] === 'O' ? <div className={styles.invalidMove} key={99}><CircleMark /></div> : null)] : '') :
                     (
                         // create an array of length
                         // of (the number of occurrences of i in moves), in other words how many of times did the player pick this square
                         // fill array with circle icons
                         [...Array(moves.filter(m => m == i).length)].map((_, _i) => <div className={styles.squareMarkWrap} key={_i}>{isBattle ? <CircleMark /> : <XMark />}</div>)
-                            .concat(oppMoves && i == oppMoves[0] ? <div className={styles.oppFirstMove}><XMark stroke={false}/></div> : null)
+                            .concat(oppMoves && i == oppMoves[0] ? <div className={styles.oppFirstMove} key={99}><XMark stroke={false}/></div> : null)
                     )
                     // show player's moves as numbers
                     // ( clickOrder[i] ? 
