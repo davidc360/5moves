@@ -254,7 +254,7 @@ export default function Game({ data }) {
                     <div className={styles.tip}>
                         { isBattle ?
                                 <span><strong>{oppName ? oppName : 'Opponent'}</strong> has picked their moves.</span>
-                                : 'Tip: you can pick the same square more than once.'
+                                : 'Tip: once a square is filled, it cannot be overridden.'
                             }
                     </div>
                     <div>
