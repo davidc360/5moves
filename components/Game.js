@@ -21,7 +21,7 @@ export default function Game({ data }) {
 
     const getInitGrid = () => {
         const arr = [...Array(9)]
-        arr[oppMoves[0]] = 'X'
+        if (oppMoves) arr[oppMoves[0]] = 'X'
         return arr
     }
     const [gridValues, setGridValues] = useState(getInitGrid())
@@ -63,7 +63,7 @@ export default function Game({ data }) {
                         // of (the number of occurrences of i in moves), in other words how many of times did the player pick this square
                         // fill array with circle icons
                         [...Array(moves.filter(m => m == i).length)].map((_, _i) => <div className={styles.squareMarkWrap} key={_i}>{isBattle ? <CircleMark /> : <XMark />}</div>)
-                            .concat(i == oppMoves[0] ? <div className={styles.oppFirstMove}><XMark stroke={false}/></div> : null)
+                            .concat(oppMoves && i == oppMoves[0] ? <div className={styles.oppFirstMove}><XMark stroke={false}/></div> : null)
                     )
                     // show player's moves as numbers
                     // ( clickOrder[i] ? 
