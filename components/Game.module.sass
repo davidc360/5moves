@@ -56,7 +56,7 @@
         border-bottom: solid 1px black
 
 .squarePick
-    display: inline-flex
+    display: flex
     position: relative
     text-align: center
     align-items: center
@@ -113,6 +113,11 @@
         stroke: gray
         animation: strokeAndDisappear ease 0.55s forwards
  
+.oppFirstMove
+    position: absolute
+    width: 100% !important
+    svg
+        animation: none !important
 
 .blackStroke
     svg
@@ -141,7 +146,7 @@
     &:nth-child(5)
         position: absolute
         width: 50%
-    &:last-child
+    &:nth-last-child(2)
         flex-grow: 0
         flex-basis: 50%
     &:only-child

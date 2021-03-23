@@ -50,7 +50,7 @@ export default function Game({ data }) {
         // stored as a single number
         // i.e., {6: 12} meaning it was clicked first & second time
         return (
-            <div key={i} id={i} onClick={addMove} className={`${isBattle? styles.squareBattle:styles.squarePick} ${(winner&&winner!=='Draw')?styles.dim:''} ${winnerCoordinates.includes(i)?styles.blackStroke:''}`}>
+            <div key={i} id={i} onClick={addMove} className={`${movesPicked? styles.squareBattle:styles.squarePick} ${(winner&&winner!=='Draw')?styles.dim:''} ${winnerCoordinates.includes(i)?styles.blackStroke:''}`}>
                 {movesPicked && isBattle ?
                     (gridValues[i] ? [MARKS[gridValues[i]], (movesThatDontCount[i] === 'X' ? <div className={styles.invalidMove}><XMark /></div> : movesThatDontCount[i] === 'O' ? <div className={styles.invalidMove}><CircleMark /></div> : null)] : '') :
                     (
@@ -58,7 +58,7 @@ export default function Game({ data }) {
                         // of (the number of occurrences of i in moves), in other words how many of times did the player pick this square
                         // fill array with circle icons
                         [...Array(moves.filter(m => m == i).length)].map((_, _i) => <div className={styles.squareMarkWrap} key={_i}>{isBattle ? <CircleMark /> : <XMark />}</div>)
-                        .concat(movesThatDontCount[i] === 'X' ? <XMark /> : movesThatDontCount[i] === 'O' ? <CircleMark /> : null)
+                            .concat(i == oppMoves[0] ? <div className={styles.oppFirstMove}><XMark stroke={false}/></div> : null)
                     )
                     // show player's moves as numbers
                     // ( clickOrder[i] ? 
@@ -150,6 +150,11 @@ export default function Game({ data }) {
         }
     }
     
+    // show opponent's first move
+    useEffect(() => {
+        addMoveToGrid(1, 'X')
+    }, [])
+
     const timeouts = useRef([])
     // how long each move takes
     const speed = 1000
@@ -160,12 +165,12 @@ export default function Game({ data }) {
                 for (let i = 0; i < MAX_MOVES; i++) {
                     timeouts.current.push(setTimeout(() => {
                         // set opponent's move
-                        addMoveToGrid(oppMoves[i], 'X')
-                        // addMove(oppMoves[i])
+                        if (i > 0) {
+                            addMoveToGrid(oppMoves[i], 'X')
+                        }
                         
                         // set self move
                         timeouts.current.push(setTimeout(() => {
-                            // addMove(oppMoves[i])
                             addMoveToGrid(moves[i], 'O')
                         }, speed))
 
@@ -308,10 +313,10 @@ function getCoordinates({ row, column, diagonalStart }) {
     }
 }
 
-const XMark = () => (
+const XMark = ({stroke}) => (
     <svg className={styles.mark} viewBox="0 0 52 52">
-        <path className={styles.x_stroke1} d="M16 16 36 36" />
-        <path className={styles.x_stroke2} d="M36 16 16 36" />
+        <path className={stroke !== false && styles.x_stroke1} d="M16 16 36 36" />
+        <path className={stroke !== false && styles.x_stroke2} d="M36 16 16 36" />
     </svg>
 )
 
