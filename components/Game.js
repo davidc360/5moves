@@ -241,10 +241,10 @@ export default function Game({ data }) {
 
     function playNow(e) {
         const tempMoves = moves
-        reset()
-        setOppName(nameInputRef.current.value)
-        setIsBattle(true)
         setOppMoves(tempMoves)
+        setOppName(nameInputRef.current.value)
+        reset()
+        setIsBattle(true)
     }
 
     return (
