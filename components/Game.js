@@ -127,7 +127,6 @@ export default function Game({ data }) {
             setWinner(winner_data[0])
             setWinnerCoordinates(winner_data[1])
         }
-        
     }, [gridValues])
 
     function containsSame(arr) {
@@ -262,7 +261,9 @@ export default function Game({ data }) {
                 )
                 : (
             // main game
-                <div className={styles.ctn}>
+            
+            <div className={styles.ctn}>
+                    <div className={`${styles.button} ${styles.homeButton}`} onClick={routeToHome}>Home</div>
                     <div className={isBattle && movesPicked ? styles.hide : ''}>
                     <div className={styles.prompt}>Pick {MAX_MOVES} moves to {isBattle ? 'begin the' : 'create a'} game</div>
                     <div className={styles.tip}>
