@@ -19,8 +19,13 @@ export default function Game({ data }) {
     const [moves, setMoves] = useState([])
     const [movesPicked, setMovesPicked] = useState(false)
 
-    const [gridValues, setGridValues] = useState([...Array(9)])
-    const gridValuesRef = useRef([...Array(9)])
+    const getInitGrid = () => {
+        const arr = [...Array(9)]
+        arr[oppMoves[0]] = 'X'
+        return arr
+    }
+    const [gridValues, setGridValues] = useState(getInitGrid())
+    const gridValuesRef = useRef(getInitGrid())
     const movesThatDontCountedRef = useRef([...Array(9)])
     const [movesThatDontCount, setMovesThatDontCount] = useState([])
  
@@ -30,8 +35,8 @@ export default function Game({ data }) {
         setMoves([])
         setMovesPicked(false)
         timeouts.current = []
-        gridValuesRef.current = [...Array(9)]
-        setGridValues([...Array(9)])
+        gridValuesRef.current = getInitGrid()
+        setGridValues(getInitGrid())
         movesThatDontCountedRef.current = []
         setMovesThatDontCount([])
     }
@@ -152,7 +157,7 @@ export default function Game({ data }) {
     
     // show opponent's first move
     useEffect(() => {
-        addMoveToGrid(1, 'X')
+        // addMoveToGrid(0, 'X')
     }, [])
 
     const timeouts = useRef([])
@@ -315,8 +320,8 @@ function getCoordinates({ row, column, diagonalStart }) {
 
 const XMark = ({stroke}) => (
     <svg className={styles.mark} viewBox="0 0 52 52">
-        <path className={stroke !== false && styles.x_stroke1} d="M16 16 36 36" />
-        <path className={stroke !== false && styles.x_stroke2} d="M36 16 16 36" />
+        <path className={stroke !== false ? styles.x_stroke1:''} d="M16 16 36 36" />
+        <path className={stroke !== false ? styles.x_stroke2:''} d="M36 16 16 36" />
     </svg>
 )
 
