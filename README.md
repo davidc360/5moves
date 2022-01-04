@@ -7,6 +7,6 @@ How it works:
 4. Watch your moves play out. If someone gets a straight line before all moves are exhausted, they win, otherwise, it's a draw.
 
 
-## Deployment
+## View live
 
 https://5moves.xyz/
